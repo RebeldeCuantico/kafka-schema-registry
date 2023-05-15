@@ -2,7 +2,7 @@
 {
     public static class Generator
     {
-        private static readonly Random RandomGenerator = new Random();
+        private static readonly Random RandomGenerator = new();
 
         public static string GetRegistration()
         {
