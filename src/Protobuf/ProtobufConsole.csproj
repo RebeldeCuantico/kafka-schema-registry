@@ -9,14 +9,9 @@
 
   <ItemGroup>
     <PackageReference Include="Confluent.SchemaRegistry.Serdes.Protobuf" Version="2.1.1" />
-    <PackageReference Include="Grpc.Tools" Version="2.54.0">
-      <!--<PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>-->
-    </PackageReference>
+    <PackageReference Include="Grpc.Tools" Version="2.54.0" />
     <ProjectReference Include="..\Common\Common.csproj" />
-
     <Protobuf Include="proto\vehicle.proto" />
-
   </ItemGroup>
 
 </Project>

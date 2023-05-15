@@ -9,7 +9,7 @@ namespace Common
         protected readonly string _topic;
         protected readonly ConsumerConfig _consumerConfig;
         protected readonly SchemaRegistryConfig _schemaRegistryConfig;
-        private CachedSchemaRegistryClient _schemaRegistry;
+        protected CachedSchemaRegistryClient _schemaRegistry;
         protected IConsumer<string, T> _consumer;
 
         protected ConsumerBase() { }

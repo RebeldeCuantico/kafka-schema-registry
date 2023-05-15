@@ -2,7 +2,7 @@
 using Confluent.Kafka;
 using Confluent.SchemaRegistry.Serdes;
 
-namespace JsonFormat
+namespace JsonConsole
 {
     public class JsonProducer<T> : ProducerBase<T>
         where T : class

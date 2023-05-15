@@ -1,16 +1,15 @@
 ﻿using Common;
 using Confluent.Kafka;
 using Confluent.SchemaRegistry.Serdes;
-using Google.Protobuf;
 
-namespace ProtobufConsole
+namespace AvroConsole
 {
-    public class ProtoProducer<T> : ProducerBase<T>
-        where T : class, IMessage<T>, new()
+    public class AvroProducer<T> : ProducerBase<T>
+        where T : class
     {
-        public ProtoProducer(string bootstrapServers, string schemaRegistryUrl, string topic)
+        public AvroProducer(string bootstrapServers, string schemaRegistryUrl, string topic)
            : base(bootstrapServers, schemaRegistryUrl, topic)
-        {            
+        {
         }
 
         public void Build()
@@ -19,7 +18,7 @@ namespace ProtobufConsole
 
             _producer =
                  new ProducerBuilder<string, T>(_producerConfig)
-                    .SetValueSerializer(new ProtobufSerializer<T>(_schemaRegistry))
+                    .SetValueSerializer(new AvroSerializer<T>(_schemaRegistry))
                     .Build();
         }
     }

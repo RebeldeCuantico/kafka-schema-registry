@@ -1,15 +1,17 @@
-﻿using Common;
+﻿using AvroConsole;
+using AvroConsole.Entity;
+using Common;
 using Confluent.Kafka;
-using ProtobufConsole;
+
 
 var bootstrapServers = "localhost:9092";
 string schemaRegistryUrl = "http://localhost:8081";
-string topicName = "protobuf-topic";
-string consumerGroup = "protobuf-cg-001";
+string topicName = "avro-topic";
+string consumerGroup = "avro-cg-001";
 
 var cts = new CancellationTokenSource();
-var vehicleProducer = new ProtoProducer<vehicle>(bootstrapServers, schemaRegistryUrl, topicName);
-var vehicleConsumer = new ProtoConsumer<vehicle>(bootstrapServers, schemaRegistryUrl, consumerGroup, topicName);
+var vehicleProducer = new AvroProducer<Vehicle>(bootstrapServers, schemaRegistryUrl, topicName);
+var vehicleConsumer = new AvroConsumer<Vehicle>(bootstrapServers, schemaRegistryUrl, consumerGroup, topicName);
 
 Console.CancelKeyPress += (sender, e) =>
 {
@@ -24,14 +26,14 @@ var produce = Task.Run(async () =>
 
     while (true)
     {
-        var vehicle = new vehicle
+        var vehicle = new Vehicle
         {
-            Coordinates = Generator.GetCoordinates(),
-            Registration = Generator.GetRegistration(),
-            Speed = Generator.GetSpeed()
+            coordinates = Generator.GetCoordinates(),
+            registration = Generator.GetRegistration(),
+            speed = Generator.GetSpeed()
         };
 
-        Console.WriteLine($"Sending: Vehicle {vehicle.Registration} is in {vehicle.Coordinates} with a speed of {vehicle.Speed} km/h at {DateTime.Now}. Ctrl+C to exit.");
+        Console.WriteLine($"Sending: Vehicle {vehicle.registration} is in {vehicle.coordinates} with a speed of {vehicle.speed} km/h at {DateTime.Now}. Ctrl+C to exit.");
 
         await vehicleProducer.ProduceAsync(vehicle);
 
@@ -48,7 +50,7 @@ var consumer = Task.Run(() =>
         try
         {
             var vehicle = vehicleConsumer.Consume(cts.Token);
-            Console.WriteLine($"Receiving: Vehicle {vehicle.Registration} is in {vehicle.Coordinates} with a speed of {vehicle.Speed} km/h at {DateTime.Now} ");
+            Console.WriteLine($"Receiving: Vehicle {vehicle.registration} is in {vehicle.coordinates} with a speed of {vehicle.speed} km/h at {DateTime.Now} ");
         }
         catch (ConsumeException e)
         {

@@ -2,14 +2,13 @@
 using Confluent.Kafka;
 using Confluent.Kafka.SyncOverAsync;
 using Confluent.SchemaRegistry.Serdes;
-using Google.Protobuf;
 
-namespace ProtobufConsole
+namespace AvroConsole
 {
-    public class ProtoConsumer<T> : ConsumerBase<T>
-        where T : class, IMessage<T>, new()
+    public class AvroConsumer<T> : ConsumerBase<T>
+        where T : class
     {
-        public ProtoConsumer(string bootstrapServers, string schemaRegistryUrl, string consumerGroup, string topic)
+        public AvroConsumer(string bootstrapServers, string schemaRegistryUrl, string consumerGroup, string topic)
             : base(bootstrapServers, schemaRegistryUrl, consumerGroup, topic)
         {
         }
@@ -19,12 +18,11 @@ namespace ProtobufConsole
             base.AddSchemaRegistry();
             _consumer =
                     new ConsumerBuilder<string, T>(_consumerConfig)
-                        .SetValueDeserializer(new ProtobufDeserializer<T>().AsSyncOverAsync())
+                        .SetValueDeserializer(new AvroDeserializer<T>(_schemaRegistry).AsSyncOverAsync())
                         .SetErrorHandler((_, e) => Console.WriteLine($"Error: {e.Reason}"))
                         .Build();
 
             _consumer.Subscribe(_topic);
         }
     }
-
 }

@@ -3,7 +3,7 @@ using Confluent.Kafka;
 using Confluent.Kafka.SyncOverAsync;
 using Confluent.SchemaRegistry.Serdes;
 
-namespace JsonFormat
+namespace JsonConsole
 {
     internal class JsonConsumer<T> : ConsumerBase<T>
         where T : class

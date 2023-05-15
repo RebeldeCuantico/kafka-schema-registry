@@ -1,0 +1,19 @@
+﻿{
+    "namespace": "SchemaRegistryExamples.Avro",
+    "name": "Vehicle",
+    "type": "record",
+    "fields": [
+        {
+            "name": "registration",
+            "type": "string"
+        },
+        {
+            "name": "speed",
+            "type": "int"
+        },
+        {
+            "name": "coordinates",
+            "type": "string"
+        }        
+    ]
+}

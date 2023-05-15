@@ -1,6 +1,6 @@
 ﻿using Common;
 using Confluent.Kafka;
-using JsonFormat;
+using JsonConsole;
 
 var bootstrapServers = "localhost:9092";
 string schemaRegistryUrl = "http://localhost:8081";
