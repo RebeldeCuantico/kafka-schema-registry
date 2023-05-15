@@ -1,15 +1,15 @@
 ﻿using Common;
 using Confluent.Kafka;
-using JsonFormat;
+using Protobuf;
 
 var bootstrapServers = "localhost:9092";
 string schemaRegistryUrl = "http://localhost:8081";
-string topicName = "json-topic";
-string consumerGroup = "json-cg-001";
+string topicName = "protobuf-topic";
+string consumerGroup = "protobuf-cg-001";
 
 var cts = new CancellationTokenSource();
-var vehicleProducer = new JsonProducer<Vehicle>(bootstrapServers, schemaRegistryUrl, topicName);
-var vehicleConsumer = new JsonConsumer<Vehicle>(bootstrapServers, schemaRegistryUrl, consumerGroup, topicName);
+var vehicleProducer = new ProtoProducer<vehicle>(bootstrapServers, schemaRegistryUrl, topicName);
+var vehicleConsumer = new ProtoConsumer<vehicle>(bootstrapServers, schemaRegistryUrl, consumerGroup, topicName);
 
 Console.CancelKeyPress += (sender, e) =>
 {
@@ -24,7 +24,7 @@ var produce = Task.Run(async () =>
 
     while (true)
     {
-        var vehicle = new Vehicle
+        var vehicle = new vehicle
         {
             Coordinates = Generator.GetCoordinates(),
             Registration = Generator.GetRegistration(),
@@ -40,22 +40,22 @@ var produce = Task.Run(async () =>
 });
 
 var consumer = Task.Run(() =>
- {
-     vehicleConsumer.Build();
+{
+    vehicleConsumer.Build();
 
-     while (true)
-     {
-         try
-         {
-             var vehicle = vehicleConsumer.Consume(cts.Token);
-             Console.WriteLine($"Receiving: Vehicle {vehicle.Registration} is in {vehicle.Coordinates} with a speed of {vehicle.Speed} km/h at {DateTime.Now} ");
-         }
-         catch (ConsumeException e)
-         {
-             Console.WriteLine($"Error ---> {e.Error.Reason}");
-         }
-     }
- });
+    while (true)
+    {
+        try
+        {
+            var vehicle = vehicleConsumer.Consume(cts.Token);
+            Console.WriteLine($"Receiving: Vehicle {vehicle.Registration} is in {vehicle.Coordinates} with a speed of {vehicle.Speed} km/h at {DateTime.Now} ");
+        }
+        catch (ConsumeException e)
+        {
+            Console.WriteLine($"Error ---> {e.Error.Reason}");
+        }
+    }
+});
 
 Console.WriteLine("The application is running. Press Ctrl+C to exit.");
 while (true)

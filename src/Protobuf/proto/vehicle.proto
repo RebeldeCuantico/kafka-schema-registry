@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+
+message vehicle
+{
+	string Registration = 1;
+    int32 Speed = 2;
+    string Coordinates = 3;
+}
+
